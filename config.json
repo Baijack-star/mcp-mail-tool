@@ -1,0 +1,57 @@
+{
+  "_comment": "MCP Mail Tool Configuration Template",
+  "_instructions": {
+    "outlook_setup": "For Outlook/Office365, you MUST use App Password instead of regular password",
+    "app_password_steps": [
+      "1. Go to https://account.microsoft.com/security",
+      "2. Sign in with your Microsoft account",
+      "3. Select 'Advanced security options'",
+      "4. Under 'App passwords', select 'Create a new app password'",
+      "5. Copy the generated app password and use it in the 'password' field below",
+      "6. Enable 2FA if not already enabled (required for app passwords)"
+    ],
+    "security_note": "Never commit this file with real credentials to version control"
+  },
+  
+  "email": "your-email@outlook.com",
+  "password": "your-app-password-here",
+  
+  "imap_server": "outlook.office365.com",
+  "imap_port": 993,
+  
+  "smtp_server": "smtp.office365.com",
+  "smtp_port": 587,
+  
+  "advanced_settings": {
+    "timeout": 30,
+    "retry_count": 3,
+    "retry_delay": 2,
+    "debug": false,
+    "enable_logging": true
+  },
+  
+  "error_handling": {
+    "auto_retry": true,
+    "max_retries": 3,
+    "backoff_strategy": "linear"
+  },
+  
+  "_examples": {
+    "gmail": {
+      "email": "your-email@gmail.com",
+      "password": "your-app-password",
+      "imap_server": "imap.gmail.com",
+      "imap_port": 993,
+      "smtp_server": "smtp.gmail.com",
+      "smtp_port": 587
+    },
+    "outlook": {
+      "email": "your-email@outlook.com",
+      "password": "your-app-password",
+      "imap_server": "outlook.office365.com",
+      "imap_port": 993,
+      "smtp_server": "smtp.office365.com",
+      "smtp_port": 587
+    }
+  }
+}
