@@ -1,0 +1,35 @@
+# MCP Mail Tool Requirements
+# This tool primarily uses Python built-in libraries
+# No external dependencies required for basic functionality
+
+# Core dependencies (built-in Python libraries)
+# - imaplib (built-in)
+# - smtplib (built-in) 
+# - email (built-in)
+# - json (built-in)
+# - logging (built-in)
+# - datetime (built-in)
+# - time (built-in)
+# - sys (built-in)
+# - os (built-in)
+
+# Optional dependencies for enhanced functionality
+# Uncomment if you need these features:
+
+# For HTML email parsing (optional)
+# beautifulsoup4>=4.9.0
+
+# For advanced email parsing (optional)
+# email-validator>=1.1.0
+
+# For secure credential storage (optional)
+# keyring>=23.0.0
+
+# Development dependencies (optional)
+# pytest>=6.0.0
+# pytest-cov>=2.10.0
+# black>=21.0.0
+# flake8>=3.8.0
+
+# Note: This tool is designed to work with Python 3.6+ standard library
+# No pip install required for basic email operations
