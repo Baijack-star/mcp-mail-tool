@@ -1,0 +1,262 @@
+{
+  "name": "mcp_mail",
+  "version": "1.0.0",
+  "description": "MCP Mail Tool MVP - A Model Context Protocol tool for email operations with Outlook/Office365 support",
+  "author": "AI-Dev",
+  "license": "MIT",
+  "mcp_version": "0.1.0",
+  "capabilities": {
+    "tools": [
+      {
+        "name": "mail_read",
+        "description": "Read emails from specified folder with configurable limit",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "folder": {
+              "type": "string",
+              "description": "Email folder name (default: INBOX)",
+              "default": "INBOX"
+            },
+            "limit": {
+              "type": "integer",
+              "description": "Maximum number of emails to retrieve (default: 10)",
+              "default": 10,
+              "minimum": 1,
+              "maximum": 100
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "success": {
+              "type": "boolean",
+              "description": "Operation success status"
+            },
+            "emails": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "description": "Email unique identifier"
+                  },
+                  "subject": {
+                    "type": "string",
+                    "description": "Email subject"
+                  },
+                  "sender": {
+                    "type": "string",
+                    "description": "Email sender"
+                  },
+                  "date": {
+                    "type": "string",
+                    "description": "Email date"
+                  },
+                  "body_summary": {
+                    "type": "string",
+                    "description": "Email body summary (max 200 chars)"
+                  }
+                },
+                "required": ["id", "subject", "sender", "date", "body_summary"]
+              }
+            },
+            "count": {
+              "type": "integer",
+              "description": "Number of emails retrieved"
+            },
+            "error": {
+              "type": "string",
+              "description": "Error message if operation failed"
+            }
+          },
+          "required": ["success", "emails", "count"]
+        }
+      },
+      {
+        "name": "mail_send",
+        "description": "Send email to specified recipient",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "to": {
+              "type": "string",
+              "description": "Recipient email address",
+              "format": "email"
+            },
+            "subject": {
+              "type": "string",
+              "description": "Email subject"
+            },
+            "body": {
+              "type": "string",
+              "description": "Email body content"
+            }
+          },
+          "required": ["to", "subject", "body"]
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "success": {
+              "type": "boolean",
+              "description": "Operation success status"
+            },
+            "message": {
+              "type": "string",
+              "description": "Success message"
+            },
+            "timestamp": {
+              "type": "string",
+              "description": "Operation timestamp (ISO format)"
+            },
+            "error": {
+              "type": "string",
+              "description": "Error message if operation failed"
+            }
+          },
+          "required": ["success", "timestamp"]
+        }
+      },
+      {
+        "name": "mail_get",
+        "description": "Get full email content by email ID",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "email_id": {
+              "type": "string",
+              "description": "Email unique identifier"
+            }
+          },
+          "required": ["email_id"]
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "success": {
+              "type": "boolean",
+              "description": "Operation success status"
+            },
+            "id": {
+              "type": "string",
+              "description": "Email unique identifier"
+            },
+            "subject": {
+              "type": "string",
+              "description": "Email subject"
+            },
+            "sender": {
+              "type": "string",
+              "description": "Email sender"
+            },
+            "to": {
+              "type": "string",
+              "description": "Email recipient"
+            },
+            "date": {
+              "type": "string",
+              "description": "Email date"
+            },
+            "body": {
+              "type": "string",
+              "description": "Full email body content"
+            },
+            "error": {
+              "type": "string",
+              "description": "Error message if operation failed"
+            }
+          },
+          "required": ["success"]
+        }
+      }
+    ]
+  },
+  "configuration": {
+    "required": {
+      "email": {
+        "type": "string",
+        "description": "Email address for authentication",
+        "format": "email"
+      },
+      "password": {
+        "type": "string",
+        "description": "Email password or app password for Outlook/Office365",
+        "sensitive": true
+      },
+      "imap_server": {
+        "type": "string",
+        "description": "IMAP server address",
+        "default": "outlook.office365.com"
+      },
+      "smtp_server": {
+        "type": "string",
+        "description": "SMTP server address",
+        "default": "smtp.office365.com"
+      }
+    },
+    "optional": {
+      "imap_port": {
+        "type": "integer",
+        "description": "IMAP server port",
+        "default": 993
+      },
+      "smtp_port": {
+        "type": "integer",
+        "description": "SMTP server port",
+        "default": 587
+      },
+      "timeout": {
+        "type": "integer",
+        "description": "Connection timeout in seconds",
+        "default": 30
+      },
+      "retry_count": {
+        "type": "integer",
+        "description": "Number of retry attempts for failed operations",
+        "default": 3
+      },
+      "retry_delay": {
+        "type": "integer",
+        "description": "Delay between retry attempts in seconds",
+        "default": 2
+      },
+      "debug": {
+        "type": "boolean",
+        "description": "Enable debug logging",
+        "default": false
+      }
+    }
+  },
+  "error_codes": {
+    "CONFIGURATION_ERROR": "Configuration file error or missing required fields",
+    "AUTHENTICATION_FAILED": "Email authentication failed - check credentials or use app password",
+    "NETWORK_ERROR": "Network connection error",
+    "IMAP_CONNECTION_FAILED": "IMAP server connection failed",
+    "SMTP_CONNECTION_FAILED": "SMTP server connection failed",
+    "FOLDER_NOT_FOUND": "Email folder not found or inaccessible",
+    "EMAIL_NOT_FOUND": "Email with specified ID not found",
+    "INVALID_EMAIL_FORMAT": "Invalid email address format"
+  },
+  "requirements": {
+    "python": ">=3.6",
+    "dependencies": [
+      "Built-in libraries only (imaplib, smtplib, email, json, logging)"
+    ]
+  },
+  "usage_examples": {
+    "command_line": {
+      "read_emails": "python mcp_mail.py read INBOX 5",
+      "send_email": "python mcp_mail.py send recipient@example.com 'Subject' 'Body content'",
+      "get_email": "python mcp_mail.py get 123"
+    },
+    "python_api": {
+      "initialization": "tool = MCPMailTool('config.json')",
+      "read_emails": "result = tool.mail_read('INBOX', 10)",
+      "send_email": "result = tool.mail_send('to@example.com', 'Subject', 'Body')",
+      "get_email": "result = tool.mail_get('email_id')"
+    }
+  }
+}
